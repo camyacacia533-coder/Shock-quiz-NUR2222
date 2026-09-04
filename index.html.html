@@ -1,0 +1,1644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ch. 42 Quiz — Shock</title>
+<style>
+:root{
+  --bg:#0f0a17;
+  --card:#1a1226;
+  --card2:#221a33;
+  --accent:#c026a3;
+  --accent2:#a855f7;
+  --text:#f1e9fb;
+  --muted:#a992c9;
+  --correct:#22c55e;
+  --incorrect:#f43f5e;
+  --border:#3a2a56;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  background:radial-gradient(circle at top,#1c1130,#0f0a17 60%);
+  color:var(--text);
+  font-family:'Segoe UI',Helvetica,Arial,sans-serif;
+  min-height:100vh;
+  padding-bottom:60px;
+}
+header{
+  padding:22px 16px 14px;
+  text-align:center;
+  background:linear-gradient(120deg,#701a75,#4c1d95);
+  box-shadow:0 4px 18px rgba(168,85,247,0.25);
+}
+header h1{
+  margin:0 0 4px;
+  font-size:1.5rem;
+  background:linear-gradient(90deg,#f0abfc,#e9d5ff);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+header p{margin:0;color:#e9d5ff;font-size:0.85rem;}
+
+/* ---- Filter bar ---- */
+#filter-wrap{
+  max-width:760px;
+  margin:16px auto 0;
+  padding:0 16px;
+}
+.tabbar{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-bottom:10px;
+}
+.tabbtn{
+  background:var(--card2);
+  color:var(--muted);
+  border:1.5px solid var(--border);
+  border-radius:20px;
+  padding:6px 13px;
+  font-size:0.78rem;
+  font-weight:700;
+  cursor:pointer;
+  transition:all .15s;
+}
+.tabbtn:hover{border-color:var(--accent2);color:var(--text);}
+.tabbtn.active{
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  color:#fff;
+  border-color:transparent;
+}
+.tabbtn.sata-tab.active{background:linear-gradient(90deg,#db2777,#9333ea);}
+#topic-select{
+  width:100%;
+  background:var(--card2);
+  color:var(--text);
+  border:1.5px solid var(--border);
+  border-radius:10px;
+  padding:8px 12px;
+  font-size:0.85rem;
+  margin-bottom:6px;
+}
+#filter-summary{
+  font-size:0.76rem;
+  color:var(--muted);
+  margin-bottom:6px;
+}
+#filter-summary b{color:#f0abfc;}
+
+#progress-bar-bg{
+  background:var(--card2);
+  border-radius:20px;
+  height:10px;
+  overflow:hidden;
+  border:1px solid var(--border);
+}
+#progress-bar{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  transition:width .3s ease;
+}
+#progress-text{
+  text-align:center;
+  color:var(--muted);
+  font-size:0.78rem;
+  margin-top:4px;
+}
+main{
+  max-width:760px;
+  margin:16px auto;
+  padding:0 16px;
+}
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:20px;
+  box-shadow:0 6px 20px rgba(0,0,0,0.35);
+}
+.tag{
+  display:inline-block;
+  font-size:0.68rem;
+  font-weight:700;
+  letter-spacing:0.5px;
+  padding:3px 10px;
+  border-radius:20px;
+  background:rgba(192,38,163,0.25);
+  color:#f0abfc;
+  margin-bottom:10px;
+  margin-right:6px;
+}
+.tag.sata{background:rgba(168,85,247,0.28);color:#d8b4fe;}
+.tag.cat{background:rgba(34,197,94,0.16);color:#86efac;}
+.qnum{color:var(--muted);font-size:0.78rem;margin-bottom:2px;}
+.stem{font-size:1.02rem;line-height:1.5;margin:6px 0 16px;white-space:pre-line;}
+.option{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  background:var(--card2);
+  border:1.5px solid var(--border);
+  border-radius:12px;
+  padding:11px 14px;
+  margin-bottom:9px;
+  cursor:pointer;
+  transition:border-color .15s, background .15s;
+  font-size:0.93rem;
+  line-height:1.4;
+}
+.option:hover{border-color:var(--accent2);}
+.option.selected{border-color:var(--accent2);background:#2c2049;}
+.option input{margin-top:3px; accent-color:var(--accent2);}
+.option.correct-answer{border-color:var(--correct)!important;background:rgba(34,197,94,0.12)!important;}
+.option.incorrect-answer{border-color:var(--incorrect)!important;background:rgba(244,63,94,0.12)!important;}
+.option .mark{margin-left:auto;font-weight:800;font-size:0.85rem;}
+.option .mark.ok{color:var(--correct);}
+.option .mark.no{color:var(--incorrect);}
+.btnrow{display:flex;gap:10px;margin-top:16px;}
+button{
+  border:none;
+  border-radius:12px;
+  padding:11px 18px;
+  font-size:0.92rem;
+  font-weight:700;
+  cursor:pointer;
+  transition:transform .1s, opacity .15s;
+}
+button:active{transform:scale(0.97);}
+button:disabled{opacity:0.4;cursor:not-allowed;}
+.btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;flex:1;}
+.btn-secondary{background:var(--card2);color:var(--text);border:1px solid var(--border);flex:1;}
+.rationale{
+  margin-top:16px;
+  background:#150f22;
+  border-left:4px solid var(--accent2);
+  border-radius:10px;
+  padding:12px 14px;
+  font-size:0.87rem;
+  line-height:1.5;
+  color:#dcd0f0;
+  display:none;
+}
+.rationale.show{display:block;}
+.rationale b{color:#f0abfc;}
+.resultbanner{
+  text-align:center;
+  padding:10px;
+  border-radius:10px;
+  font-weight:800;
+  margin-bottom:14px;
+  font-size:0.95rem;
+}
+.resultbanner.ok{background:rgba(34,197,94,0.15);color:#4ade80;}
+.resultbanner.no{background:rgba(244,63,94,0.15);color:#fb7185;}
+#summary-card{display:none;text-align:center;}
+#summary-card h2{color:#f0abfc;}
+#summary-card .score{font-size:2.6rem;font-weight:900;background:linear-gradient(90deg,#f0abfc,#a855f7);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.missed-list{text-align:left;background:var(--card2);border-radius:12px;padding:12px 16px;margin:16px 0;font-size:0.85rem;color:var(--muted);}
+.missed-list li{margin:4px 0;}
+footer{text-align:center;color:var(--muted);font-size:0.72rem;margin-top:30px;}
+.hint{font-size:0.75rem;color:var(--muted);margin-bottom:10px;}
+.retry-row{
+  margin-top:18px;
+  padding-top:16px;
+  border-top:1.5px dashed var(--border);
+}
+.retry-row .btn-retry{
+  width:100%;
+  background:linear-gradient(90deg,#db2777,#9333ea);
+  color:#fff;
+  padding:13px;
+  font-size:0.98rem;
+}
+.other-actions{display:flex;gap:10px;margin-top:10px;}
+#empty-state{display:none;text-align:center;color:var(--muted);padding:30px 10px;}
+</style>
+</head>
+<body>
+
+<header>
+<h1>💜 Ch. 42 Quiz: Shock</h1>
+<p>NUR 2222 • Lewis Med-Surg 12th ed. • Filter by category or topic below</p>
+</header>
+
+<div id="filter-wrap">
+  <div class="tabbar" id="cat-tabs"></div>
+  <select id="topic-select"></select>
+  <div id="filter-summary"></div>
+  <div id="progress-bar-bg"><div id="progress-bar"></div></div>
+  <div id="progress-text">Question 1 of 1</div>
+</div>
+
+<main>
+  <div id="empty-state">
+    <p>😅 No questions match this combination of filters. Try a different topic or category.</p>
+  </div>
+
+  <div class="card" id="quiz-card">
+    <div class="tag" id="q-tag">TOPIC</div>
+    <div class="tag cat" id="q-cat">CATEGORY</div>
+    <div class="qnum" id="q-num">Question 1</div>
+    <div class="stem" id="q-stem">Loading...</div>
+    <div class="hint" id="q-hint"></div>
+    <div id="q-options"></div>
+    <div class="rationale" id="q-rationale"></div>
+    <div class="btnrow">
+      <button class="btn-primary" id="btn-submit">Submit Answer</button>
+      <button class="btn-secondary" id="btn-next" style="display:none;">Next Question →</button>
+    </div>
+  </div>
+
+  <div class="card" id="summary-card">
+    <h2>🎉 Round Complete</h2>
+    <div class="score" id="score-display">0/0</div>
+    <p id="score-msg"></p>
+    <div class="missed-list" id="missed-list-wrap" style="display:none;">
+      <b>Topics you missed:</b>
+      <ul id="missed-list"></ul>
+    </div>
+    <div class="retry-row" id="retry-row" style="display:none;">
+      <button class="btn-retry" id="btn-retry-missed">🔁 Retry Missed Questions Only</button>
+    </div>
+    <div class="other-actions">
+      <button class="btn-secondary" id="btn-restart">Restart This Set</button>
+      <button class="btn-secondary" id="btn-change-filter">Change Topic / Category</button>
+    </div>
+  </div>
+</main>
+
+<footer>Built for active recall practice — attempt every question before revealing the rationale 🩺</footer>
+
+<script>
+const QUESTIONS = [
+  {
+    "tag": "Shock Overview",
+    "type": "single",
+    "stem": "A nursing instructor explains that although the cause, initial presentation, and management of shock vary by type, one thing stays the same across all types. What is it?",
+    "options": [
+      {
+        "t": "The physiologic response of cells to hypoperfusion is similar across all shock types",
+        "c": true
+      },
+      {
+        "t": "All types of shock present with tachycardia and hypertension",
+        "c": false
+      },
+      {
+        "t": "All types of shock are treated the same way regardless of cause",
+        "c": false
+      },
+      {
+        "t": "All types of shock begin with a primary cardiac problem",
+        "c": false
+      }
+    ],
+    "rationale": "Although the cause, initial presentation, and management vary for each type of shock, the physiologic responses of cells to hypoperfusion are similar. Not all shock types present with hypertension (most are hypotensive), and management is tailored to the specific type and underlying cause.",
+    "category": "patho"
+  },
+  {
+    "tag": "Cardiogenic Shock",
+    "type": "single",
+    "stem": "A patient 2 days post-anterior wall MI develops tachycardia, hypotension, a narrowed pulse pressure, crackles bilaterally, and cool, clammy skin. Hemodynamic monitoring shows an increased PAWP. Which type of shock is this most consistent with?",
+    "options": [
+      {
+        "t": "Cardiogenic shock — systolic dysfunction from the MI is impairing forward flow, backing pressure up into the pulmonary circulation",
+        "c": true
+      },
+      {
+        "t": "Neurogenic shock — this presentation is expected after any acute illness",
+        "c": false
+      },
+      {
+        "t": "Anaphylactic shock — flushing and urticaria are the expected skin findings",
+        "c": false
+      },
+      {
+        "t": "Obstructive shock — this always presents with a normal PAWP",
+        "c": false
+      }
+    ],
+    "rationale": "Cardiogenic shock occurs when systolic or diastolic dysfunction reduces CO, SV, and BP. It is the leading cause of death from acute MI. The narrowed pulse pressure reflects the heart's inability to pump blood forward during systole; increased PAWP reflects pulmonary congestion from the failing left ventricle; cool, clammy skin and crackles are classic findings.",
+    "category": "patho"
+  },
+  {
+    "tag": "Cardiogenic Shock",
+    "type": "single",
+    "stem": "A patient has cardiogenic shock from acute MI affecting primarily the left ventricle. The nurse understands that systolic dysfunction primarily affects the left side of the heart rather than the right because:",
+    "options": [
+      {
+        "t": "Systolic pressure is greater on the left side of the heart",
+        "c": true
+      },
+      {
+        "t": "The right ventricle is not connected to the pulmonary circulation",
+        "c": false
+      },
+      {
+        "t": "The left ventricle has no coronary blood supply",
+        "c": false
+      },
+      {
+        "t": "Diastolic dysfunction only ever affects the right ventricle",
+        "c": false
+      }
+    ],
+    "rationale": "Systolic dysfunction primarily affects the left ventricle because systolic pressure is greater on the left side of the heart. When systolic dysfunction affects the right side instead, blood flow through the pulmonary circulation is reduced.",
+    "category": "patho"
+  },
+  {
+    "tag": "Hypovolemic Shock",
+    "type": "single",
+    "stem": "A trauma patient has lost an estimated 35% of total blood volume from an open femur fracture. Based on known thresholds for blood volume loss, what should the nurse anticipate?",
+    "options": [
+      {
+        "t": "The patient can likely compensate fully with crystalloid fluids alone",
+        "c": false
+      },
+      {
+        "t": "Compensatory mechanisms may be failing at this volume loss, and immediate replacement with blood products should be started",
+        "c": true
+      },
+      {
+        "t": "No intervention is needed until blood loss exceeds 50%",
+        "c": false
+      },
+      {
+        "t": "This level of loss is associated with full loss of autoregulation and irreversible tissue destruction",
+        "c": false
+      }
+    ],
+    "rationale": "A patient can typically compensate for a loss of up to 15% of total blood volume. Loss of 15–30% triggers an SNS-mediated response that is generally reversible with prompt crystalloid replacement. With loss greater than 30% (as in this 35% loss), compensatory mechanisms may fail and immediate replacement with blood products should be started. Loss of more than 40% causes loss of autoregulation and irreversible tissue destruction — this patient has not yet reached that threshold.",
+    "category": "patho"
+  },
+  {
+    "tag": "Hypovolemic Shock",
+    "type": "single",
+    "stem": "A patient with a large burn injury develops signs of hypovolemic shock even though no external blood loss has occurred. What type of volume loss explains this presentation?",
+    "options": [
+      {
+        "t": "Absolute hypovolemia from external hemorrhage",
+        "c": false
+      },
+      {
+        "t": "Relative hypovolemia from fluid shifting out of the vascular space into the extravascular space (third spacing) due to increased capillary permeability",
+        "c": true
+      },
+      {
+        "t": "This is not a form of hypovolemic shock",
+        "c": false
+      },
+      {
+        "t": "Absolute hypovolemia from excessive diuresis",
+        "c": false
+      }
+    ],
+    "rationale": "In relative hypovolemia, fluid volume moves out of the vascular space into the extravascular space (third spacing). Burn injuries are a classic example, where increased capillary permeability lets fluid leak from the vascular to the interstitial space, even without any external blood or fluid loss.",
+    "category": "patho"
+  },
+  {
+    "tag": "Hypovolemic Shock",
+    "type": "single",
+    "stem": "A trauma patient in hypovolemic shock requires fluid resuscitation. The provider orders fluids using the standard 3:1 rule. If the estimated blood loss is 1000 mL, how much isotonic crystalloid should the nurse anticipate administering initially?",
+    "options": [
+      {
+        "t": "1000 mL",
+        "c": false
+      },
+      {
+        "t": "3000 mL",
+        "c": true
+      },
+      {
+        "t": "300 mL",
+        "c": false
+      },
+      {
+        "t": "500 mL",
+        "c": false
+      }
+    ],
+    "rationale": "The 3:1 rule for initial fluid resuscitation in hypovolemic shock uses 3 mL of isotonic crystalloid for every 1 mL of estimated blood loss. For 1000 mL of estimated blood loss, that's 3000 mL of crystalloid.",
+    "category": "treatment"
+  },
+  {
+    "tag": "Neurogenic Shock",
+    "type": "single",
+    "stem": "A patient with a new C6 spinal cord injury develops a heart rate of 48 beats/min and a blood pressure of 78/42 mmHg. The nurse recognizes this combination of findings is most consistent with which type of shock?",
+    "options": [
+      {
+        "t": "Hypovolemic shock, since tachycardia and hypotension always occur together",
+        "c": false
+      },
+      {
+        "t": "Neurogenic shock — this is the one shock type where bradycardia (not tachycardia) occurs, from unopposed parasympathetic stimulation after loss of SNS vasoconstrictor tone",
+        "c": true
+      },
+      {
+        "t": "Septic shock, which always presents with bradycardia",
+        "c": false
+      },
+      {
+        "t": "Cardiogenic shock, since this is the expected presentation after any spinal injury",
+        "c": false
+      }
+    ],
+    "rationale": "Neurogenic shock's classic manifestations are hypotension (from massive vasodilation due to loss of SNS vasoconstrictor tone) AND bradycardia (from unopposed parasympathetic stimulation) — this is the exception to the tachycardia seen in essentially every other type of shock. It's generally associated with a cervical or high thoracic (at or above T5) spinal cord injury.",
+    "category": "patho"
+  },
+  {
+    "tag": "Neurogenic Shock",
+    "type": "single",
+    "stem": "A patient with neurogenic shock from a spinal cord injury initially has warm skin, but several hours later the skin becomes cool despite a warm room. How should the nurse interpret this change?",
+    "options": [
+      {
+        "t": "This indicates the patient is developing septic shock instead",
+        "c": false
+      },
+      {
+        "t": "This reflects poikilothermia — as the initial heat from massive vasodilation disperses, the patient loses the ability to regulate body temperature and begins taking on the temperature of the environment",
+        "c": true
+      },
+      {
+        "t": "This is an unrelated, incidental finding requiring no further assessment",
+        "c": false
+      },
+      {
+        "t": "This means the neurogenic shock has fully resolved",
+        "c": false
+      }
+    ],
+    "rationale": "In neurogenic shock, the patient cannot regulate body temperature. Initially the skin is warm from the massive vasodilation; as the heat disperses, the patient is at risk for hypothermia. Later the skin may be cool or warm depending on the ambient temperature — this phenomenon is called poikilothermia (taking on the temperature of the environment).",
+    "category": "patho"
+  },
+  {
+    "tag": "Anaphylactic Shock",
+    "type": "single",
+    "stem": "A patient develops sudden dizziness, chest pain, swelling of the lips and tongue, wheezing, and a sense of impending doom shortly after receiving IV contrast media. What is the priority drug the nurse should anticipate administering?",
+    "options": [
+      {
+        "t": "Diphenhydramine as the sole treatment",
+        "c": false
+      },
+      {
+        "t": "Epinephrine — the drug of choice for anaphylactic shock, since it causes peripheral vasoconstriction and bronchodilation and opposes the effects of histamine",
+        "c": true
+      },
+      {
+        "t": "A beta-blocker to control the tachycardia",
+        "c": false
+      },
+      {
+        "t": "Norepinephrine as the first-line agent",
+        "c": false
+      }
+    ],
+    "rationale": "Epinephrine is the drug of choice to treat anaphylactic shock — it causes peripheral vasoconstriction and bronchodilation and opposes the effect of histamine. Diphenhydramine and H2-receptor blockers (e.g., famotidine) are adjunctive therapies to block ongoing histamine release, not first-line treatment.",
+    "category": "treatment"
+  },
+  {
+    "tag": "Sepsis / Septic Shock",
+    "type": "single",
+    "stem": "A nurse is explaining the difference between sepsis and septic shock to a nursing student. What is the most accurate explanation?",
+    "options": [
+      {
+        "t": "Sepsis and septic shock are the same condition with different names",
+        "c": false
+      },
+      {
+        "t": "Septic shock is a subset of sepsis, characterized by persistent hypotension despite adequate fluid resuscitation and inadequate tissue perfusion causing tissue hypoxia",
+        "c": true
+      },
+      {
+        "t": "Sepsis always requires vasopressor therapy, while septic shock does not",
+        "c": false
+      },
+      {
+        "t": "Septic shock has a lower mortality risk than sepsis alone",
+        "c": false
+      }
+    ],
+    "rationale": "Sepsis is a life-threatening syndrome in response to infection, with a dysregulated response and new organ dysfunction. Septic shock is a subset of sepsis with an increased mortality risk due to profound circulatory, cellular, and metabolic abnormalities — defined by persistent hypotension despite adequate fluid resuscitation, plus inadequate tissue perfusion causing tissue hypoxia.",
+    "category": "patho"
+  },
+  {
+    "tag": "Sepsis / Septic Shock",
+    "type": "sata",
+    "stem": "Which findings would meet diagnostic criteria for sepsis in a patient with documented infection? Select all that apply.",
+    "options": [
+      {
+        "t": "Heart rate of 104 beats/min",
+        "c": true
+      },
+      {
+        "t": "Blood glucose of 168 mg/dL in a patient without diabetes",
+        "c": true
+      },
+      {
+        "t": "Acute oliguria with urine output less than 0.5 mL/kg/hr for over 2 hours despite adequate fluid resuscitation",
+        "c": true
+      },
+      {
+        "t": "Platelet count of 82,000/μL",
+        "c": true
+      },
+      {
+        "t": "Serum lactate of 1.8 mmol/L",
+        "c": true
+      },
+      {
+        "t": "A normal, unchanged mental status with no other findings present",
+        "c": false
+      }
+    ],
+    "rationale": "Sepsis diagnostic criteria include general variables (HR >90/min, hyperglycemia >140 mg/dL without diabetes), organ dysfunction variables (acute oliguria, thrombocytopenia with platelets <100,000/μL), and tissue perfusion variables (hyperlactatemia >1 mmol/L). A normal mental status alone, with no other supporting findings, does not meet sepsis criteria — altered mental status is one of the general variables that WOULD count.",
+    "category": "diagnostic"
+  },
+  {
+    "tag": "Septic Shock",
+    "type": "single",
+    "stem": "A patient with early septic shock has warm, flushed skin and a normal-to-high cardiac output, in contrast to the cool, clammy skin typically seen in other types of shock. What explains this difference?",
+    "options": [
+      {
+        "t": "Early septic shock is characterized by a hyperdynamic state with massive vasodilation, unlike the vasoconstrictive picture in most other shock types",
+        "c": true
+      },
+      {
+        "t": "This patient does not actually have septic shock",
+        "c": false
+      },
+      {
+        "t": "Warm, flushed skin only occurs in the refractory stage of any shock type",
+        "c": false
+      },
+      {
+        "t": "This finding indicates the patient has fully recovered",
+        "c": false
+      }
+    ],
+    "rationale": "Septic shock has 3 major pathophysiologic effects: vasodilation, maldistribution of blood flow, and myocardial depression. Unlike most shock types where SNS-mediated vasoconstriction causes cool, clammy skin, early septic shock's massive vasodilation and hyperdynamic state cause warm, flushed skin — this later progresses to cool and mottled skin as shock worsens.",
+    "category": "patho"
+  },
+  {
+    "tag": "Septic Shock",
+    "type": "single",
+    "stem": "A patient with suspected septic shock needs blood cultures drawn and antibiotic therapy started. What is the correct sequence of these actions?",
+    "options": [
+      {
+        "t": "Obtain cultures before starting antibiotics, but this should not delay giving antibiotics within the first hour of recognized sepsis/septic shock",
+        "c": true
+      },
+      {
+        "t": "Always wait for culture results, even if it takes 48 hours, before starting any antibiotics",
+        "c": false
+      },
+      {
+        "t": "Give antibiotics first and never obtain cultures, since cultures are not useful in septic shock",
+        "c": false
+      },
+      {
+        "t": "There is no time-sensitive component to antibiotic administration in septic shock",
+        "c": false
+      }
+    ],
+    "rationale": "Broad-spectrum antibiotics are an important and early part of therapy and should be started within the first hour of sepsis or septic shock. Cultures (blood, wound, urine, stool, sputum) should be obtained before starting antibiotics, but this should NOT delay the start of antibiotics within that first hour.",
+    "category": "treatment"
+  },
+  {
+    "tag": "Septic Shock",
+    "type": "single",
+    "stem": "A patient in septic shock remains hypotensive despite 30 mL/kg of crystalloid fluid resuscitation. Which drug should the nurse anticipate as the first-line agent to be added?",
+    "options": [
+      {
+        "t": "Norepinephrine — the first drug of choice for septic shock unresponsive to adequate fluid resuscitation",
+        "c": true
+      },
+      {
+        "t": "Sodium nitroprusside",
+        "c": false
+      },
+      {
+        "t": "Phenylephrine, since it is first-line for all distributive shock",
+        "c": false
+      },
+      {
+        "t": "Nitroglycerin",
+        "c": false
+      }
+    ],
+    "rationale": "If the patient is hypotensive after initial volume resuscitation and no longer fluid responsive, vasopressors may be added. The first drug of choice for septic shock is norepinephrine. Vasopressin may be added for patients refractory to initial vasopressor therapy.",
+    "category": "treatment"
+  },
+  {
+    "tag": "Drug Therapy",
+    "type": "single",
+    "stem": "A patient in septic shock is started on a vasopressin infusion in addition to norepinephrine. Which nursing action is correct regarding this drug?",
+    "options": [
+      {
+        "t": "Titrate the vasopressin infusion up or down based on blood pressure response, just like norepinephrine",
+        "c": false
+      },
+      {
+        "t": "Infuse at a low, fixed dose and do NOT titrate the infusion; use cautiously in patients with coronary artery disease",
+        "c": true
+      },
+      {
+        "t": "Discontinue the norepinephrine once vasopressin is started",
+        "c": false
+      },
+      {
+        "t": "Administer vasopressin as the sole agent without norepinephrine",
+        "c": false
+      }
+    ],
+    "rationale": "Vasopressin is given along with norepinephrine, infused at low doses (e.g., 0.03 units/min) using an IV pump, and the infusion is NOT titrated. It should be used cautiously in patients with coronary artery disease. Septic shock often depletes the body's own vasopressin stores, so the exogenous dose replaces this deficit rather than acting as a dose-dependent pressor.",
+    "category": "treatment"
+  },
+  {
+    "tag": "Drug Therapy",
+    "type": "single",
+    "stem": "Before starting a vasopressor infusion for a hypotensive patient in shock, what is the priority nursing consideration?",
+    "options": [
+      {
+        "t": "Vasopressors should always be started immediately, regardless of fluid status",
+        "c": false
+      },
+      {
+        "t": "Adequate fluid resuscitation should be achieved first, since vasoconstriction in a volume-depleted patient will further reduce tissue perfusion",
+        "c": true
+      },
+      {
+        "t": "Vasopressors are only used in cardiogenic shock",
+        "c": false
+      },
+      {
+        "t": "Fluid resuscitation is contraindicated once a vasopressor is ordered",
+        "c": false
+      }
+    ],
+    "rationale": "Use of vasopressor drugs is limited to patients who do not respond to fluid resuscitation. Adequate fluid resuscitation must be achieved before starting vasopressors, because the vasoconstrictor effects in a patient with low blood volume will further reduce tissue perfusion.",
+    "category": "treatment"
+  },
+  {
+    "tag": "Drug Therapy",
+    "type": "sata",
+    "stem": "A patient is receiving IV dopamine for cardiogenic shock. Which adverse effects should the nurse monitor for? Select all that apply.",
+    "options": [
+      {
+        "t": "Tachydysrhythmias",
+        "c": true
+      },
+      {
+        "t": "Peripheral vasoconstriction with paresthesias and coldness in the extremities at higher doses",
+        "c": true
+      },
+      {
+        "t": "Increased myocardial oxygen demand",
+        "c": true
+      },
+      {
+        "t": "Nausea, vomiting, and headache",
+        "c": true
+      },
+      {
+        "t": "Tissue sloughing if the drug infiltrates",
+        "c": true
+      },
+      {
+        "t": "Profound sedation and respiratory depression",
+        "c": false
+      }
+    ],
+    "rationale": "Dopamine's adverse effects include tachydysrhythmias, peripheral vasoconstriction/ischemia (paresthesias, cold extremities) at higher doses, increased myocardial O2 demand, nausea/vomiting, headache, hypertension, and tissue sloughing with infiltration. Sedation and respiratory depression are not associated with dopamine, which is a positive inotrope/vasopressor, not a sedative.",
+    "category": "treatment"
+  },
+  {
+    "tag": "Drug Therapy",
+    "type": "single",
+    "stem": "A patient receiving sodium nitroprusside for cardiogenic shock with elevated SVR develops metabolic acidosis, altered level of consciousness, and an almond-like odor on the breath. What should the nurse suspect?",
+    "options": [
+      {
+        "t": "Expected side effects requiring no action",
+        "c": false
+      },
+      {
+        "t": "Cyanide toxicity — a known complication of prolonged or high-dose nitroprusside therapy",
+        "c": true
+      },
+      {
+        "t": "Normal progression of the patient's underlying cardiogenic shock",
+        "c": false
+      },
+      {
+        "t": "An allergic reaction to the drug's diluent",
+        "c": false
+      }
+    ],
+    "rationale": "Nitroprusside can cause cyanide/thiocyanate toxicity with prolonged or high-dose use, presenting with metabolic acidosis, tachycardia, altered level of consciousness, seizures, coma, and an almond smell on the breath. The nurse should monitor serum cyanide levels and protect the solution from light.",
+    "category": "treatment"
+  },
+  {
+    "tag": "Compensatory Stage",
+    "type": "sata",
+    "stem": "Which findings are expected during the compensatory stage of shock as the sympathetic nervous system activates? Select all that apply.",
+    "options": [
+      {
+        "t": "Narrowed pulse pressure and decreasing blood pressure",
+        "c": true
+      },
+      {
+        "t": "Increased heart rate and myocardial contractility",
+        "c": true
+      },
+      {
+        "t": "Blood flow shunted away from the kidneys, GI tract, skin, and lungs",
+        "c": true
+      },
+      {
+        "t": "Restlessness, apprehension, and confusion",
+        "c": true
+      },
+      {
+        "t": "Hypoactive bowel sounds and increased risk for paralytic ileus",
+        "c": true
+      },
+      {
+        "t": "Anuria and unresponsiveness",
+        "c": false
+      }
+    ],
+    "rationale": "In the compensatory stage, the SNS activates: epinephrine/norepinephrine release causes vasoconstriction, ↑HR, ↑contractility. Blood flow to the heart and brain is maintained while blood is shunted from nonvital organs (kidneys, GI tract, skin, lungs). This causes hypoactive bowel sounds/↑paralytic ileus risk and neurologic changes (restless, apprehensive, confused). Anuria and unresponsiveness are refractory-stage findings, not compensatory-stage findings.",
+    "category": "patho"
+  },
+  {
+    "tag": "Progressive Stage",
+    "type": "single",
+    "stem": "A patient in the progressive stage of shock develops tachypnea, crackles, and increasing work of breathing. The nurse recognizes this as significant because:",
+    "options": [
+      {
+        "t": "The pulmonary system is often the FIRST system to show signs of critical dysfunction in the progressive stage",
+        "c": true
+      },
+      {
+        "t": "Respiratory symptoms are the last finding to appear in shock and indicate imminent recovery",
+        "c": false
+      },
+      {
+        "t": "This finding is unrelated to the patient's shock state",
+        "c": false
+      },
+      {
+        "t": "Pulmonary findings only occur in the refractory stage",
+        "c": false
+      }
+    ],
+    "rationale": "In the progressive stage, the pulmonary system is often the first system to show signs of critical dysfunction. Reduced blood flow to the lungs plus SNS-mediated pulmonary arteriole constriction increases PA pressure, worsening ventilation-perfusion mismatch; fluid moves into the interstitial and then alveolar space, causing pulmonary edema, decreased compliance, tachypnea, crackles, and increased work of breathing.",
+    "category": "patho"
+  },
+  {
+    "tag": "Refractory Stage",
+    "type": "single",
+    "stem": "A patient in shock is now unresponsive with fixed, dilated pupils, absent reflexes, and profound hypotension unresponsive to escalating vasopressor doses. What stage of shock does this represent, and what is the expected prognosis?",
+    "options": [
+      {
+        "t": "Compensatory stage — full recovery is expected",
+        "c": false
+      },
+      {
+        "t": "Progressive stage — the patient should be transferred to a lower level of care",
+        "c": false
+      },
+      {
+        "t": "Refractory stage — recovery is unlikely, as the organs are in failure and the body's compensatory mechanisms are overwhelmed",
+        "c": true
+      },
+      {
+        "t": "Initial stage — this is not yet clinically apparent",
+        "c": false
+      }
+    ],
+    "rationale": "The refractory stage is the last stage of shock. Findings include unresponsiveness, areflexia, nonreactive/dilated pupils, profound hypotension, and inadequate perfusion to vital organs. Recovery is unlikely in this stage — the organs are in failure and the body's compensatory mechanisms are overwhelmed.",
+    "category": "patho"
+  },
+  {
+    "tag": "Diagnostic Studies",
+    "category": "diagnostic",
+    "type": "sata",
+    "stem": "Which laboratory and clinical findings are expected in EARLY-stage shock, before significant anaerobic metabolism has developed? Select all that apply.",
+    "options": [
+      {
+        "t": "Respiratory alkalosis on arterial blood gases, from hyperventilation",
+        "c": true
+      },
+      {
+        "t": "Elevated blood glucose, from release of liver glycogen stores in response to sympathetic stimulation and cortisol",
+        "c": true
+      },
+      {
+        "t": "Elevated serum sodium, from increased aldosterone secretion causing renal sodium retention",
+        "c": true
+      },
+      {
+        "t": "Decreased serum potassium, from increased aldosterone secretion causing renal potassium excretion",
+        "c": true
+      },
+      {
+        "t": "Metabolic acidosis from lactate accumulation",
+        "c": false
+      },
+      {
+        "t": "Elevated liver enzymes from progressive liver cell destruction",
+        "c": false
+      }
+    ],
+    "rationale": "Early shock findings include respiratory alkalosis (from hyperventilation), elevated glucose (from glycogen release via sympathetic stimulation/cortisol), elevated sodium (from aldosterone-driven sodium retention), and decreased potassium (from aldosterone-driven potassium excretion). Metabolic acidosis (from lactate accumulation) and elevated liver enzymes (from progressive cell death) are LATER, progressive-stage findings, not early findings."
+  },
+  {
+    "tag": "Diagnostic Studies",
+    "type": "sata",
+    "stem": "A patient in the progressive stage of shock is being evaluated for disseminated intravascular coagulation (DIC). Which laboratory findings would support this diagnosis? Select all that apply.",
+    "options": [
+      {
+        "t": "Elevated D-dimer",
+        "c": true
+      },
+      {
+        "t": "Elevated fibrin split products (FSPs)",
+        "c": true
+      },
+      {
+        "t": "Decreased fibrinogen level",
+        "c": true
+      },
+      {
+        "t": "Elevated INR, PTT, and PT",
+        "c": true
+      },
+      {
+        "t": "Decreased platelet count",
+        "c": true
+      },
+      {
+        "t": "Elevated fibrinogen level with a shortened thrombin time",
+        "c": false
+      }
+    ],
+    "rationale": "DIC screening findings include elevated D-dimer, elevated fibrin split products, DECREASED fibrinogen level (consumed in clotting), elevated INR/PTT/PT, decreased platelet count, and elevated thrombin time. An elevated (not decreased) fibrinogen with a shortened (not prolonged) thrombin time is the opposite of what's expected and would not support a DIC diagnosis.",
+    "category": "diagnostic"
+  },
+  {
+    "tag": "Diagnostic Studies",
+    "type": "single",
+    "stem": "A patient who just experienced a major hemorrhage has a hemoglobin and hematocrit that are still within normal limits, even though a significant amount of blood has been lost. How should the nurse interpret this finding?",
+    "options": [
+      {
+        "t": "This means the patient has not actually lost a significant amount of blood",
+        "c": false
+      },
+      {
+        "t": "Hemoglobin and hematocrit can remain within normal limits in shock due to relative hypovolemia and pump failure, and in hemorrhagic shock before fluid resuscitation is given",
+        "c": true
+      },
+      {
+        "t": "Hemoglobin and hematocrit always drop immediately after any blood loss",
+        "c": false
+      },
+      {
+        "t": "This lab pattern rules out hypovolemic shock",
+        "c": false
+      }
+    ],
+    "rationale": "RBC count, hematocrit, and hemoglobin can remain within normal limits in shock because of relative hypovolemia and pump failure, and specifically in hemorrhagic shock BEFORE fluid resuscitation — since whole blood (cells and plasma) is lost proportionally. These values typically DROP after fluid resuscitation when fluids other than blood are used to replace volume, because the remaining blood becomes diluted.",
+    "category": "diagnostic"
+  },
+  {
+    "tag": "Fluid Therapy",
+    "type": "single",
+    "stem": "A patient with liver failure requires fluid resuscitation for shock. Which fluid should the nurse avoid or use with caution in this patient?",
+    "options": [
+      {
+        "t": "0.9% normal saline",
+        "c": false
+      },
+      {
+        "t": "Lactated Ringer solution, because a failing liver cannot convert lactate to bicarbonate, which can raise serum lactate levels",
+        "c": true
+      },
+      {
+        "t": "Packed red blood cells",
+        "c": false
+      },
+      {
+        "t": "Human serum albumin",
+        "c": false
+      }
+    ],
+    "rationale": "Lactated Ringer solution should not be used in patients with liver failure — the failing liver cannot convert the lactate in LR to bicarbonate, which can artificially raise serum lactate levels (a value also used to track shock severity, adding confusion). LR may actually be considered if hyperchloremic acidosis develops from normal saline use instead.",
+    "category": "treatment"
+  },
+  {
+    "tag": "Fluid Therapy",
+    "type": "single",
+    "stem": "A provider orders human serum albumin as a colloid for volume expansion. For which type of shock would this be an INAPPROPRIATE choice?",
+    "options": [
+      {
+        "t": "Septic shock",
+        "c": false
+      },
+      {
+        "t": "Hypovolemic shock",
+        "c": false
+      },
+      {
+        "t": "Cardiogenic or neurogenic shock",
+        "c": true
+      },
+      {
+        "t": "Anaphylactic shock",
+        "c": false
+      }
+    ],
+    "rationale": "Human serum albumin (colloid) may be used for volume expansion in all types of shock EXCEPT cardiogenic and neurogenic shock. In cardiogenic shock, the heart is already struggling to handle volume; in neurogenic shock, the primary problem is vasodilation, not volume loss.",
+    "category": "treatment"
+  },
+  {
+    "tag": "Fluid Resuscitation Safety",
+    "category": "treatment",
+    "type": "sata",
+    "stem": "A nurse is using an intraosseous (IO) access device for emergency resuscitation because IV access could not be obtained. Which statements about IO access are correct? Select all that apply.",
+    "options": [
+      {
+        "t": "Appropriate insertion sites include the sternum, proximal/distal tibia, and proximal/distal humerus",
+        "c": true
+      },
+      {
+        "t": "The device should be removed within 24 hours of insertion, or as soon as possible after peripheral or central IV access is obtained",
+        "c": true
+      },
+      {
+        "t": "The nurse should monitor for extravasation of drugs and fluids into the soft tissue",
+        "c": true
+      },
+      {
+        "t": "The nurse should monitor for fractures caused during insertion and for osteomyelitis",
+        "c": true
+      },
+      {
+        "t": "IO access devices may remain in place indefinitely with no need for removal",
+        "c": false
+      },
+      {
+        "t": "IO access should be the first choice for access even when peripheral IV access is readily obtainable",
+        "c": false
+      }
+    ],
+    "rationale": "An IO device should be used for emergency resuscitation when IV access cannot be obtained, with insertion sites at the sternum, proximal/distal tibia, and proximal/distal humerus. It should be removed within 24 hours of insertion, or as soon as possible after peripheral or central IV access is obtained. Complications to monitor include extravasation into soft tissue, fractures from insertion, and osteomyelitis. It is not meant for indefinite use nor is it the first choice for access when peripheral IV is readily available."
+  },
+  {
+    "tag": "Fluid Resuscitation",
+    "type": "single",
+    "stem": "A nurse performs a passive leg raise (PLR) challenge on a hypotensive patient by placing them supine and raising their legs to 45 degrees. Cardiac output improves within 2 minutes. What does this indicate?",
+    "options": [
+      {
+        "t": "The patient is fluid responsive and should receive additional fluids",
+        "c": true
+      },
+      {
+        "t": "The patient should immediately be started on a vasopressor instead of fluids",
+        "c": false
+      },
+      {
+        "t": "This test has no clinical significance and should not guide treatment decisions",
+        "c": false
+      },
+      {
+        "t": "The patient is in the refractory stage of shock",
+        "c": false
+      }
+    ],
+    "rationale": "A PLR challenge provides a transient increase in fluid volume of 150–500 mL by placing the patient supine with legs raised to 45 degrees. The response is monitored within 1–2 minutes by measuring CO, CI, SV, SVV, or other parameters. A positive response (improvement) means the patient is fluid responsive and should receive more fluids.",
+    "category": "diagnostic"
+  },
+  {
+    "tag": "Assessment / Monitoring",
+    "type": "single",
+    "stem": "A nurse is caring for a critically ill patient in shock and needs to continuously monitor oxygen saturation. The nurse notes that the finger pulse oximeter reading seems inconsistent with the patient's clinical picture. What should the nurse do?",
+    "options": [
+      {
+        "t": "Trust the finger probe reading completely, since it is always accurate in shock states",
+        "c": false
+      },
+      {
+        "t": "Move the probe to the ear, nose, or forehead, since finger readings may be inaccurate in shock due to poor peripheral circulation",
+        "c": true
+      },
+      {
+        "t": "Discontinue pulse oximetry monitoring altogether",
+        "c": false
+      },
+      {
+        "t": "Assume the patient's oxygenation status cannot be assessed at all",
+        "c": false
+      }
+    ],
+    "rationale": "Pulse oximetry using a patient's finger may not be accurate in a shock state because of poor peripheral circulation. Instead, the probe should be attached to the ear, nose, or forehead per manufacturer guidelines.",
+    "category": "diagnostic"
+  },
+  {
+    "tag": "Assessment / Monitoring",
+    "type": "single",
+    "stem": "A nurse is trending renal function in a patient recovering from shock. Which lab value is the better indicator of renal function in this setting, and why?",
+    "options": [
+      {
+        "t": "BUN, because it is unaffected by the patient's metabolic state",
+        "c": false
+      },
+      {
+        "t": "Serum creatinine, because BUN levels are also affected by the patient's catabolic state",
+        "c": true
+      },
+      {
+        "t": "Urine specific gravity alone, without any serum lab correlation",
+        "c": false
+      },
+      {
+        "t": "Serum potassium, since it directly reflects glomerular filtration rate",
+        "c": false
+      }
+    ],
+    "rationale": "Serum creatinine is a better indicator of renal function than BUN levels, because the patient's catabolic state (common in critical illness) affects BUN independent of actual kidney function.",
+    "category": "diagnostic"
+  },
+  {
+    "tag": "Assessment / Monitoring",
+    "type": "single",
+    "stem": "A nurse assessing a patient in shock notes a new S3 heart sound on auscultation. What is the significance of this finding?",
+    "options": [
+      {
+        "t": "An S3 sound is a normal finding in all critically ill adults and requires no further action",
+        "c": false
+      },
+      {
+        "t": "An S3 sound usually indicates heart failure",
+        "c": true
+      },
+      {
+        "t": "An S3 sound indicates the patient's fluid resuscitation should be stopped immediately with no further assessment",
+        "c": false
+      },
+      {
+        "t": "An S3 sound is only significant in pediatric patients",
+        "c": false
+      }
+    ],
+    "rationale": "Assessing heart sounds for an S3 or S4 sound or new murmurs is part of cardiovascular monitoring in shock. An S3 sound usually indicates heart failure — an important finding to report, especially in a patient receiving aggressive fluid resuscitation who may be at risk for fluid overload.",
+    "category": "patho"
+  },
+  {
+    "tag": "Nutrition Therapy",
+    "type": "single",
+    "stem": "A patient in shock is being started on enteral nutrition. What is the recommended initial approach?",
+    "options": [
+      {
+        "t": "Start full calorie replacement immediately to correct the hypermetabolic state",
+        "c": false
+      },
+      {
+        "t": "Start enteral nutrition within the first 24 hours using a small trophic feeding, and advance as tolerated rather than starting with full calorie replacement",
+        "c": true
+      },
+      {
+        "t": "Avoid enteral nutrition entirely in favor of parenteral nutrition for all patients in shock",
+        "c": false
+      },
+      {
+        "t": "Delay all nutrition support until the patient is out of the ICU",
+        "c": false
+      }
+    ],
+    "rationale": "Enteral nutrition (EN) should be started within the first 24 hours, but full calorie replacement is not recommended for previously well-nourished adults early in critical illness. Start with a trophic feeding (small amount of EN, e.g., 10 mL/hr) — early EN enhances GI perfusion and helps maintain gut mucosal integrity. Advance as tolerated. Parenteral nutrition is used only if EN is contraindicated.",
+    "category": "treatment"
+  },
+  {
+    "tag": "Obstructive Shock",
+    "type": "single",
+    "stem": "A trauma patient develops jugular venous distention, pulsus paradoxus, muffled heart sounds, and hypotension after a chest injury. The provider suspects cardiac tamponade causing obstructive shock. What is the priority intervention?",
+    "options": [
+      {
+        "t": "Aggressive crystalloid fluid resuscitation as the sole treatment",
+        "c": false
+      },
+      {
+        "t": "Mechanical decompression of the obstruction, such as pericardiocentesis, since obstructive shock requires early recognition and treatment of the underlying obstruction",
+        "c": true
+      },
+      {
+        "t": "Administration of a beta-blocker to slow the heart rate",
+        "c": false
+      },
+      {
+        "t": "Observation only, since this condition typically resolves spontaneously",
+        "c": false
+      }
+    ],
+    "rationale": "Obstructive shock develops from a physical obstruction to blood flow with decreased CO. The main strategy in treatment is early recognition and treatment to relieve or manage the obstruction — mechanical decompression (needle or tube insertion, or pericardiocentesis) is used for pericardial tamponade, tension pneumothorax, and hemopneumothorax. Fluid resuscitation may provide only temporary improvement, not a fix for the underlying obstruction.",
+    "category": "treatment"
+  },
+  {
+    "tag": "Safety Alert",
+    "type": "sata",
+    "stem": "A nurse is preparing to give IV contrast media to a patient. Which actions help prevent an anaphylactic reaction? Select all that apply.",
+    "options": [
+      {
+        "t": "Confirm the patient's allergies before giving the drug or starting the diagnostic procedure",
+        "c": true
+      },
+      {
+        "t": "Premedicate the patient with diphenhydramine and/or methylprednisolone if they are at high risk for an allergic reaction to contrast media",
+        "c": true
+      },
+      {
+        "t": "Encourage patients with known allergies to wear a medical alert device and report all allergies to their HCPs",
+        "c": true
+      },
+      {
+        "t": "Teach patients about kits containing epinephrine for treatment of acute allergic reactions",
+        "c": true
+      },
+      {
+        "t": "Skip the allergy history if the patient has received contrast media once before without incident",
+        "c": false
+      }
+    ],
+    "rationale": "Preventing allergic reactions includes always confirming allergies before giving drugs or starting procedures like a CT scan with contrast media, premedicating high-risk patients, encouraging medical alert devices and allergy reporting, and teaching patients about emergency epinephrine kits. A prior uneventful exposure does NOT rule out the possibility of a reaction on a subsequent exposure, so allergy history should never be skipped.",
+    "category": "teaching"
+  },
+  {
+    "tag": "Health Promotion",
+    "type": "single",
+    "stem": "A nurse caring for an acute anterior wall MI patient at high risk for cardiogenic shock plans care to limit infarct size. Which intervention best supports this goal?",
+    "options": [
+      {
+        "t": "Encourage early ambulation and vigorous activity to strengthen the heart muscle",
+        "c": false
+      },
+      {
+        "t": "Provide rest, analgesics, and sedation to reduce myocardial oxygen demand, and schedule care to avoid unnecessarily increasing oxygen demand",
+        "c": true
+      },
+      {
+        "t": "Perform all nursing care and diagnostic testing at the same time to minimize interruptions",
+        "c": false
+      },
+      {
+        "t": "Withhold all pain medication to keep the patient alert for neurologic checks",
+        "c": false
+      }
+    ],
+    "rationale": "For a patient at high risk for cardiogenic shock, the main goal is to limit infarct size by restoring coronary blood flow. Rest, analgesics, and sedation reduce myocardial O2 demand. The ICU environment should be modified to provide care at intervals that do not increase O2 demand — for example, avoiding overlapping tiring activities like bathing with other demanding tests or care.",
+    "category": "treatment"
+  },
+  {
+    "tag": "Health Promotion",
+    "type": "single",
+    "stem": "A nurse is implementing strategies to reduce the risk of health care–associated infections (HAIs) that could progress to septic shock. Which action is most appropriate?",
+    "options": [
+      {
+        "t": "Leave invasive catheters and central lines in place as long as possible regardless of ongoing need",
+        "c": false
+      },
+      {
+        "t": "Decrease the number of invasive catheters used, use aseptic technique during invasive procedures, and follow evidence-based care bundles",
+        "c": true
+      },
+      {
+        "t": "Reuse disposable equipment between patients to save on supply costs",
+        "c": false
+      },
+      {
+        "t": "Rely solely on antibiotics rather than infection prevention practices",
+        "c": false
+      }
+    ],
+    "rationale": "Strategies to decrease the risk for HAIs include decreasing the number of invasive catheters (central lines, bladder catheters), using aseptic technique during invasive procedures, and paying strict attention to hand washing. Care bundles are evidence-based guidelines outlining key interventions to reduce infections like VAP, central line infections, and CAUTIs.",
+    "category": "treatment"
+  },
+  {
+    "tag": "Emotional Support",
+    "type": "single",
+    "stem": "The family of a critically ill patient in shock is anxious and asks many questions about the patient's prognosis. What is the most therapeutic nursing approach?",
+    "options": [
+      {
+        "t": "Avoid answering any questions about prognosis to prevent causing more distress",
+        "c": false
+      },
+      {
+        "t": "Give simple, honest answers to questions about progress and prognosis, and try to have the same nurses care for the patient to build trust and reduce anxiety",
+        "c": true
+      },
+      {
+        "t": "Refer all questions to the physician and avoid any conversation with the family",
+        "c": false
+      },
+      {
+        "t": "Provide overly optimistic reassurance regardless of the patient's actual condition",
+        "c": false
+      }
+    ],
+    "rationale": "Caregivers need to be informed of the patient's condition. Give simple, honest answers to questions about progress and prognosis. If possible, the same nurses should care for the patient — this decreases anxiety, limits conflicting information, and increases trust. Compassion is as essential as scientific and technical expertise.",
+    "category": "teaching"
+  },
+  {
+    "tag": "Cardiogenic Shock Drugs",
+    "type": "single",
+    "stem": "A patient in cardiogenic shock is prescribed drug therapy to reduce cardiac workload. The provider selects a diuretic, a vasodilator, and a beta-blocker. What is the goal of each, respectively?",
+    "options": [
+      {
+        "t": "Reduce preload (diuretic), reduce afterload (vasodilator), reduce heart rate/contractility (beta-blocker)",
+        "c": true
+      },
+      {
+        "t": "Increase preload, increase afterload, increase heart rate — all to boost cardiac output",
+        "c": false
+      },
+      {
+        "t": "All three drugs serve the exact same purpose in cardiogenic shock",
+        "c": false
+      },
+      {
+        "t": "Diuretics increase contractility, vasodilators increase heart rate, and beta-blockers reduce preload",
+        "c": false
+      }
+    ],
+    "rationale": "Drugs can decrease the workload of the heart in cardiogenic shock by dilating coronary arteries (nitrates), reducing preload (diuretics), reducing afterload (vasodilators), and reducing heart rate and contractility (β-adrenergic blockers) — all aimed at reducing myocardial O2 demand so the heart can heal.",
+    "category": "treatment"
+  },
+  {
+    "tag": "Obstructive Shock",
+    "category": "patho",
+    "type": "sata",
+    "stem": "A patient develops obstructive shock from cardiac tamponade after a chest injury. Which findings should the nurse expect? Select all that apply.",
+    "options": [
+      {
+        "t": "Jugular venous distention",
+        "c": true
+      },
+      {
+        "t": "Pulsus paradoxus",
+        "c": true
+      },
+      {
+        "t": "Decreased cardiac output",
+        "c": true
+      },
+      {
+        "t": "Increased afterload",
+        "c": true
+      },
+      {
+        "t": "Widened pulse pressure with bradycardia",
+        "c": false
+      },
+      {
+        "t": "Warm, flushed skin",
+        "c": false
+      }
+    ],
+    "rationale": "Obstructive shock develops when a physical obstruction to blood flow decreases CO. Patients have decreased CO, increased afterload, and variable left ventricular filling pressures depending on the obstruction. Other signs include jugular venous distention and pulsus paradoxus. A widened pulse pressure with bradycardia is not a feature of obstructive shock (it suggests increased intracranial pressure), and warm, flushed skin is a septic shock finding, not obstructive shock."
+  }
+];
+// ---------- Engine ----------
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+const CATEGORY_LABELS = {
+  all: "All",
+  patho: "Pathophysiology",
+  treatment: "Treatment",
+  teaching: "Teaching / Guidelines",
+  diagnostic: "Diagnostic",
+  sata: "SATA Only"
+};
+
+let optionOrders = {};
+QUESTIONS.forEach((q,i)=>{ optionOrders[i] = shuffle(q.options.map((_,j)=>j)); });
+
+let activeCategory = 'all';
+let activeTopic = 'all';
+let queue = [];
+let currentIdx = 0;
+let score = 0;
+let answered = false;
+let selected = new Set();
+let missedIndices = [];
+let retryMode = false;
+let retryQueue = [];
+
+const els = {
+  catTabs: document.getElementById('cat-tabs'),
+  topicSelect: document.getElementById('topic-select'),
+  filterSummary: document.getElementById('filter-summary'),
+  progressBar: document.getElementById('progress-bar'),
+  progressText: document.getElementById('progress-text'),
+  quizCard: document.getElementById('quiz-card'),
+  summaryCard: document.getElementById('summary-card'),
+  emptyState: document.getElementById('empty-state'),
+  tag: document.getElementById('q-tag'),
+  cat: document.getElementById('q-cat'),
+  num: document.getElementById('q-num'),
+  stem: document.getElementById('q-stem'),
+  hint: document.getElementById('q-hint'),
+  optionsWrap: document.getElementById('q-options'),
+  rationale: document.getElementById('q-rationale'),
+  btnSubmit: document.getElementById('btn-submit'),
+  btnNext: document.getElementById('btn-next'),
+  scoreDisplay: document.getElementById('score-display'),
+  scoreMsg: document.getElementById('score-msg'),
+  missedListWrap: document.getElementById('missed-list-wrap'),
+  missedList: document.getElementById('missed-list'),
+  retryRow: document.getElementById('retry-row'),
+  btnRetryMissed: document.getElementById('btn-retry-missed'),
+  btnRestart: document.getElementById('btn-restart'),
+  btnChangeFilter: document.getElementById('btn-change-filter')
+};
+
+function buildTabs(){
+  const cats = ['all','patho','treatment','teaching','diagnostic','sata'];
+  els.catTabs.innerHTML = '';
+  cats.forEach(c=>{
+    const btn = document.createElement('button');
+    btn.className = 'tabbtn' + (c==='sata' ? ' sata-tab' : '') + (c===activeCategory ? ' active' : '');
+    btn.textContent = CATEGORY_LABELS[c];
+    btn.addEventListener('click', ()=>{
+      activeCategory = c;
+      activeTopic = 'all';
+      resetSession();
+    });
+    els.catTabs.appendChild(btn);
+  });
+}
+
+function buildTopicSelect(){
+  const topics = [...new Set(QUESTIONS.map(q=>q.tag))].sort();
+  els.topicSelect.innerHTML = '';
+  const optAll = document.createElement('option');
+  optAll.value = 'all';
+  optAll.textContent = 'All Topics';
+  els.topicSelect.appendChild(optAll);
+  topics.forEach(t=>{
+    const opt = document.createElement('option');
+    opt.value = t;
+    opt.textContent = t;
+    els.topicSelect.appendChild(opt);
+  });
+  els.topicSelect.value = activeTopic;
+  els.topicSelect.addEventListener('change', ()=>{
+    activeTopic = els.topicSelect.value;
+    resetSession();
+  });
+}
+
+function computeQueue(){
+  return QUESTIONS.map((_,i)=>i).filter(i=>{
+    const q = QUESTIONS[i];
+    const catMatch = activeCategory==='all' ? true :
+                      activeCategory==='sata' ? q.type==='sata' :
+                      q.category===activeCategory;
+    const topicMatch = activeTopic==='all' ? true : q.tag===activeTopic;
+    return catMatch && topicMatch;
+  });
+}
+
+function resetSession(){
+  retryMode = false;
+  retryQueue = [];
+  currentIdx = 0;
+  score = 0;
+  missedIndices = [];
+  queue = computeQueue();
+  buildTabs();
+  els.topicSelect.value = activeTopic;
+  updateFilterSummary();
+  els.summaryCard.style.display = 'none';
+  if(queue.length===0){
+    els.quizCard.style.display = 'none';
+    els.emptyState.style.display = 'block';
+    els.progressBar.style.width = '0%';
+    els.progressText.textContent = 'No questions';
+    return;
+  }
+  els.emptyState.style.display = 'none';
+  els.quizCard.style.display = 'block';
+  loadQuestion();
+}
+
+function updateFilterSummary(){
+  const catLabel = CATEGORY_LABELS[activeCategory];
+  const topicLabel = activeTopic==='all' ? 'All Topics' : activeTopic;
+  els.filterSummary.innerHTML = `Practicing: <b>${catLabel}</b> — <b>${topicLabel}</b> (${queue.length} question${queue.length===1?'':'s'})`;
+}
+
+function currentQueue(){
+  return retryMode ? retryQueue : queue;
+}
+
+function loadQuestion(){
+  const q_ = currentQueue();
+  if(currentIdx >= q_.length){
+    showSummary();
+    return;
+  }
+  answered = false;
+  selected = new Set();
+  const qIndex = q_[currentIdx];
+  const q = QUESTIONS[qIndex];
+
+  els.tag.textContent = q.tag;
+  els.cat.textContent = (q.type==='sata' ? 'SATA • ' : '') + CATEGORY_LABELS[q.category];
+  els.num.textContent = `Question ${currentIdx+1} of ${q_.length}` + (retryMode ? ' (Retry Round)' : '');
+  els.stem.textContent = q.stem;
+  els.hint.textContent = q.type==='sata' ? 'Select ALL options that apply, then submit.' : 'Select one option, then submit.';
+  els.rationale.className = 'rationale';
+  els.rationale.innerHTML = '';
+  els.btnSubmit.style.display = 'block';
+  els.btnSubmit.disabled = false;
+  els.btnNext.style.display = 'none';
+
+  const optOrder = optionOrders[qIndex];
+  els.optionsWrap.innerHTML = '';
+  optOrder.forEach(origIdx=>{
+    const opt = q.options[origIdx];
+    const div = document.createElement('div');
+    div.className = 'option';
+    div.dataset.origIdx = origIdx;
+    const inputType = q.type==='sata' ? 'checkbox' : 'radio';
+    div.innerHTML = `<input type="${inputType}" name="opt"> <span>${opt.t}</span> <span class="mark"></span>`;
+    div.addEventListener('click', ()=>toggleOption(div, q.type));
+    els.optionsWrap.appendChild(div);
+  });
+
+  updateProgress();
+}
+
+function toggleOption(div, type){
+  if(answered) return;
+  const origIdx = parseInt(div.dataset.origIdx);
+  if(type==='sata'){
+    if(selected.has(origIdx)){
+      selected.delete(origIdx);
+      div.classList.remove('selected');
+      div.querySelector('input').checked = false;
+    } else {
+      selected.add(origIdx);
+      div.classList.add('selected');
+      div.querySelector('input').checked = true;
+    }
+  } else {
+    selected = new Set([origIdx]);
+    [...els.optionsWrap.children].forEach(c=>{
+      c.classList.remove('selected');
+      c.querySelector('input').checked = false;
+    });
+    div.classList.add('selected');
+    div.querySelector('input').checked = true;
+  }
+}
+
+function submitAnswer(){
+  const q_ = currentQueue();
+  const qIndex = q_[currentIdx];
+  const q = QUESTIONS[qIndex];
+  if(selected.size===0){
+    alert('Please select an answer before submitting.');
+    return;
+  }
+  answered = true;
+  const correctSet = new Set(q.options.map((o,i)=>o.c?i:null).filter(v=>v!==null));
+  let isCorrect = correctSet.size===selected.size && [...correctSet].every(i=>selected.has(i));
+
+  [...els.optionsWrap.children].forEach(div=>{
+    const origIdx = parseInt(div.dataset.origIdx);
+    const wasSelected = selected.has(origIdx);
+    const isRight = correctSet.has(origIdx);
+    const mark = div.querySelector('.mark');
+    if(isRight){
+      div.classList.add('correct-answer');
+      mark.textContent = '✓ correct';
+      mark.className = 'mark ok';
+    } else if(wasSelected && !isRight){
+      div.classList.add('incorrect-answer');
+      mark.textContent = '✗ not correct';
+      mark.className = 'mark no';
+    }
+  });
+
+  if(isCorrect){
+    score++;
+  } else {
+    if(!retryMode && !missedIndices.includes(qIndex)) missedIndices.push(qIndex);
+  }
+
+  const banner = document.createElement('div');
+  banner.className = 'resultbanner ' + (isCorrect ? 'ok' : 'no');
+  banner.textContent = isCorrect ? '✅ Correct!' : '❌ Not quite — review the rationale below';
+  els.rationale.innerHTML = '';
+  els.rationale.appendChild(banner);
+  const ratText = document.createElement('div');
+  ratText.innerHTML = '<b>Rationale:</b> ' + q.rationale;
+  els.rationale.appendChild(ratText);
+  els.rationale.classList.add('show');
+
+  els.btnSubmit.style.display = 'none';
+  els.btnNext.style.display = 'block';
+}
+
+function nextQuestion(){
+  currentIdx++;
+  loadQuestion();
+}
+
+function updateProgress(){
+  const q_ = currentQueue();
+  const pct = Math.round((currentIdx/q_.length)*100);
+  els.progressBar.style.width = pct + '%';
+  els.progressText.textContent = `Question ${Math.min(currentIdx+1,q_.length)} of ${q_.length}`;
+}
+
+function showSummary(){
+  els.quizCard.style.display = 'none';
+  els.summaryCard.style.display = 'block';
+  els.progressBar.style.width = '100%';
+  const q_ = currentQueue();
+  els.scoreDisplay.textContent = `${score}/${q_.length}`;
+  const pct = q_.length ? Math.round((score/q_.length)*100) : 0;
+  let msg = '';
+  if(pct>=90) msg = "Outstanding — you've got this locked in! 💜";
+  else if(pct>=75) msg = "Solid work — review the missed topics below and you'll be exam-ready. 💗";
+  else msg = "Good start — retry your missed questions to lock it in! 🩺";
+  els.scoreMsg.textContent = `${pct}% — ${msg}`;
+
+  if(missedIndices.length>0){
+    els.missedListWrap.style.display = 'block';
+    els.missedList.innerHTML = '';
+    const uniqueTags = [...new Set(missedIndices.map(i=>QUESTIONS[i].tag))];
+    uniqueTags.forEach(t=>{
+      const li = document.createElement('li');
+      li.textContent = t;
+      els.missedList.appendChild(li);
+    });
+    els.retryRow.style.display = 'block';
+  } else {
+    els.missedListWrap.style.display = 'none';
+    els.retryRow.style.display = 'none';
+  }
+}
+
+function retryMissed(){
+  retryQueue = [...new Set(missedIndices)];
+  missedIndices = [];
+  retryMode = true;
+  currentIdx = 0;
+  score = 0;
+  els.quizCard.style.display = 'block';
+  els.summaryCard.style.display = 'none';
+  loadQuestion();
+}
+
+function restartSet(){
+  retryMode = false;
+  retryQueue = [];
+  currentIdx = 0;
+  score = 0;
+  missedIndices = [];
+  els.quizCard.style.display = 'block';
+  els.summaryCard.style.display = 'none';
+  loadQuestion();
+}
+
+function changeFilter(){
+  activeCategory = 'all';
+  activeTopic = 'all';
+  resetSession();
+}
+
+els.btnSubmit.addEventListener('click', submitAnswer);
+els.btnNext.addEventListener('click', nextQuestion);
+els.btnRetryMissed.addEventListener('click', retryMissed);
+els.btnRestart.addEventListener('click', restartSet);
+els.btnChangeFilter.addEventListener('click', changeFilter);
+
+buildTabs();
+buildTopicSelect();
+resetSession();
+</script>
+</body>
+</html>
